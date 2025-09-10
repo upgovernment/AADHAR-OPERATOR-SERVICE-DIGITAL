@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aadhar Operator Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --danger: #ea4335;
+            --warning: #f9ab00;
+            --light: #f8f9fa;
+            --dark: #202124;
+            --gray: #5f6368;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info span {
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c5221f;
+        }
+
+        .btn-success {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #2c8845;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        /* Main Content Styles */
+        main {
+            padding: 30px 0;
+            min-height: calc(100vh - 160px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .login-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dadce0;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Dashboard */
+        .dashboard-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .dashboard-header h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .service-card h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .service-card p {
+            color: var(--gray);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #dadce0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .modal-header h3 {
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            position: absolute;
+            right: 20px;
+            top: 15px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #dadce0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Biometric Scanner */
+        .biometric-scanner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .scanner-placeholder {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scanner-placeholder.scanning {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 168, 83, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(52, 168, 83, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 168, 83, 0); }
+        }
+
+        .scanner-placeholder i {
+            font-size: 64px;
+            color: var(--primary);
+        }
+
+        .scanner-status {
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* Requests Table */
+        .requests-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .requests-table th,
+        .requests-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #dadce0;
+        }
+
+        .requests-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background-color: #fff0c2;
+            color: #b06000;
+        }
+
+        .status-completed {
+            background-color: #c8f5c2;
+            color: #0a6534;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid #dadce0;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: none;
+            z-index: 1000;
+            max-width: 400px;
+            color: white;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .success-toast {
+            background-color: var(--secondary);
+        }
+
+        .error-toast {
+            background-color: var(--danger);
+        }
+
+        .info-toast {
+            background-color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .requests-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-cell {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="page active">
+        <div class="login-container">
+            <div class="login-card">
+                <h2><i class="fas fa-id-card"></i> Aadhaar Services Portal</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="user-id">User ID</label>
+                        <input type="text" id="user-id" class="form-control" placeholder="Enter your user ID">
+                        <div class="error-message" id="user-id-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                        <div class="error-message" id="password-error"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </form>
+                <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+                    <p style="font-size: 14px; margin-bottom: 10px; font-weight: 500;">Demo Credentials:</p>
+                    <p style="font-size: 13px;">User ID: khursheeda@123</p>
+                    <p style="font-size: 13px;">Password: @774926</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Container (shown after login) -->
+    <div id="app-container" class="page">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-id-card"></i>
+                        <h1>Aadhaar Services Portal</h1>
+                    </div>
+                    <div class="user-info">
+                        <span>Welcome, <span id="officer-name">Officer</span></span>
+                        <button id="logout-btn" class="btn btn-danger">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="container">
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="page active">
+                    <div class="dashboard-header">
+                        <h2>Select a Service</h2>
+                        <p>Choose from the available Aadhaar update services</p>
+                    </div>
+                    <div class="services-grid">
+                        <div class="service-card" id="dob-update-btn">
+                            <div class="service-icon">
+                                <i class="fas fa-birthday-cake"></i>
+                            </div>
+                            <h3>Aadhaar DOB Update</h3>
+                            <p>Update date of birth in Aadhaar records</p>
+                        </div>
+                        <div class="service-card" id="mobile-update-btn">
+                            <div class="service-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3>Aadhaar Mobile Update</h3>
+                            <p>Update mobile number in Aadhaar records</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 40px;">
+                        <div class="requests-header">
+                            <h2>Recent Requests</h2>
+                            <button id="refresh-requests" class="btn btn-primary">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                        <div id="requests-loading" class="spinner" style="display: none;"></div>
+                        <table class="requests-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Masked Aadhaar</th>
+                                    <th>Name</th>
+                                    <th>Service Type</th>
+                                    <th>Status</th>
+                                    <th>Timestamp</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="requests-table-body">
+                                <!-- Requests will be populated here -->
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">No requests found. Submit a request to see it here.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>© 2023 Aadhaar Services Portal. For demonstration purposes only.</p>
+                <p style="font-size: 12px; margin-top: 5px;">This is a prototype system. Do not submit real Aadhaar data.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- DOB Update Modal -->
+    <div class="modal-overlay" id="dob-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-birthday-cake"></i> Aadhaar DOB Update</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="dob-form">
+                    <div class="form-group">
+                        <label for="aadhaar-dob">Aadhaar Number</label>
+                        <input type="text" id="aadhaar-dob" class="form-control" placeholder="Enter 12-digit Aadhaar number">
+                        <div class="error-message" id="aadhaar-dob-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name-dob">Name (as on Aadhaar)</label>
+                        <input type="text" id="name-dob" class="form-control" placeholder="Enter name as on Aadhaar">
+                        <div class="error-message" id="name-dob-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="current-dob">Current Date of Birth</label>
+                        <input type="date" id="current-dob" class="form-control">
+                        <div class="error-message" id="current-dob-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-dob">New Date of Birth</label>
+                        <input type="date" id="new-dob" class="form-control">
+                        <div class="error-message" id="new-dob-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="operator-dob">Operator User ID</label>
+                        <input type="text" id="operator-dob" class="form-control" value="khursheeda@123" readonly>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger close-modal">Cancel</button>
+                <button class="btn btn-primary" id="submit-dob">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Update Modal -->
+    <div class="modal-overlay" id="mobile-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-mobile-alt"></i> Aadhaar Mobile Update</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="mobile-form">
+                    <div class="form-group">
+                        <label for="aadhaar-mobile">Aadhaar Number</label>
+                        <input type="text" id="aadhaar-mobile" class="form-control" placeholder="Enter 12-digit Aadhaar number">
+                        <div class="error-message" id="aadhaar-mobile-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name-mobile">Name (as on Aadhaar)</label>
+                        <input type="text" id="name-mobile" class="form-control" placeholder="Enter name as on Aadhaar">
+                        <div class="error-message" id="name-mobile-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-mobile">New Mobile Number</label>
+                        <input type="text" id="new-mobile" class="form-control" placeholder="Enter 10-digit mobile number">
+                        <div class="error-message" id="new-mobile-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="operator-mobile">Operator User ID</label>
+                        <input type="text" id="operator-mobile" class="form-control" value="khursheeda@123" readonly>
+                    </div>
+                    <div class="biometric-scanner">
+                        <h4>Biometric Verification Required</h4>
+                        <div class="scanner-placeholder" id="scan-fingerprint">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <p class="scanner-status" id="scanner-status">Click on the fingerprint icon to simulate scan</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger close-modal">Cancel</button>
+                <button class="btn btn-primary" id="submit-mobile" disabled>Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Update Modal -->
+    <div class="modal-overlay" id="status-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-sync-alt"></i> Update Request Status</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="status-form">
+                    <div class="form-group">
+                        <label for="status-request-id">Request ID</label>
+                        <input type="text" id="status-request-id" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="status-aadhaar">Aadhaar Number</label>
+                        <input type="text" id="status-aadhaar" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="status-name">Name</label>
+                        <input type="text" id="status-name" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="status-service">Service Type</label>
+                        <input type="text" id="status-service" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-status">Update Status To</label>
+                        <select id="new-status" class="form-control">
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger close-modal">Cancel</button>
+                <button class="btn btn-success" id="submit-status">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast success-toast" id="success-toast">
+        <i class="fas fa-check-circle"></i> <span id="success-message"></span>
+    </div>
+
+    <div class="toast error-toast" id="error-toast">
+        <i class="fas fa-exclamation-circle"></i> <span id="error-message"></span>
+    </div>
+
+    <div class="toast info-toast" id="info-toast">
+        <i class="fas fa-info-circle"></i> <span id="info-message"></span>
+    </div>
+
+    <script>
+        // Configuration - Replace with your Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxTz0-rNdRJbH6C5cbBK-EkAvogikDf4EnysMBF-SIE2u6KWjyS4ZzAxWQMVDX8Dt8s/exec';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const loginPage = document.getElementById('login-page');
+            const appContainer = document.getElementById('app-container');
+            const dashboardPage = document.getElementById('dashboard-page');
+            const dobModal = document.getElementById('dob-modal');
+            const mobileModal = document.getElementById('mobile-modal');
+            const statusModal = document.getElementById('status-modal');
+            const logoutBtn = document.getElementById('logout-btn');
+            const officerName = document.getElementById('officer-name');
+            const dobUpdateBtn = document.getElementById('dob-update-btn');
+            const mobileUpdateBtn = document.getElementById('mobile-update-btn');
+            const closeModalButtons = document.querySelectorAll('.close-modal');
+            const submitDobBtn = document.getElementById('submit-dob');
+            const submitMobileBtn = document.getElementById('submit-mobile');
+            const submitStatusBtn = document.getElementById('submit-status');
+            const scanFingerprint = document.getElementById('scan-fingerprint');
+            const scannerStatus = document.getElementById('scanner-status');
+            const successToast = document.getElementById('success-toast');
+            const successMessage = document.getElementById('success-message');
+            const errorToast = document.getElementById('error-toast');
+            const errorMessage = document.getElementById('error-message');
+            const infoToast = document.getElementById('info-toast');
+            const infoMessage = document.getElementById('info-message');
+            const loginForm = document.getElementById('login-form');
+            const refreshRequests = document.getElementById('refresh-requests');
+            const requestsTableBody = document.getElementById('requests-table-body');
+            const requestsLoading = document.getElementById('requests-loading');
+
+            // Check if user is logged in (simple session check)
+            if (sessionStorage.getItem('loggedIn') === 'true') {
+                loginPage.classList.remove('active');
+                appContainer.classList.add('active');
+                officerName.textContent = sessionStorage.getItem('username') || 'Officer';
+                loadRequests();
+            }
+
+            // Login form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const userId = document.getElementById('user-id').value;
+                const password = document.getElementById('password').value;
+                
+                // Clear previous errors
+                document.getElementById('user-id-error').style.display = 'none';
+                document.getElementById('password-error').style.display = 'none';
+                
+                // Validate credentials
+                if (userId !== 'khursheeda@123') {
+                    document.getElementById('user-id-error').textContent = 'Invalid User ID';
+                    document.getElementById('user-id-error').style.display = 'block';
+                    return;
+                }
+                
+                if (password !== '@774926') {
+                    document.getElementById('password-error').textContent = 'Invalid Password';
+                    document.getElementById('password-error').style.display = 'block';
+                    return;
+                }
+                
+                // Successful login
+                sessionStorage.setItem('loggedIn', 'true');
+                sessionStorage.setItem('username', 'Khursheeda');
+                loginPage.classList.remove('active');
+                appContainer.classList.add('active');
+                officerName.textContent = 'Khursheeda';
+                loadRequests();
+            });
+
+            // Logout functionality
+            logoutBtn.addEventListener('click', function() {
+                sessionStorage.removeItem('loggedIn');
+                sessionStorage.removeItem('username');
+                appContainer.classList.remove('active');
+                loginPage.classList.add('active');
+            });
+
+            // Open modals
+            dobUpdateBtn.addEventListener('click', function() {
+                dobModal.classList.add('active');
+            });
+
+            mobileUpdateBtn.addEventListener('click', function() {
+                mobileModal.classList.add('active');
+                // Reset biometric scanner
+                scannerStatus.textContent = 'Click on the fingerprint icon to simulate scan';
+                submitMobileBtn.disabled = true;
+                scanFingerprint.classList.remove('scanning');
+                scanFingerprint.innerHTML = '<i class="fas fa-fingerprint"></i>';
+            });
+
+            // Close modals
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    dobModal.classList.remove('active');
+                    mobileModal.classList.remove('active');
+                    statusModal.classList.remove('active');
+                });
+            });
+
+            // Simulate biometric scan
+            scanFingerprint.addEventListener('click', function() {
+                scannerStatus.textContent = 'Scanning...';
+                scanFingerprint.classList.add('scanning');
+                scanFingerprint.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                // Simulate scan process
+                setTimeout(function() {
+                    scannerStatus.textContent = 'Scan successful!';
+                    scanFingerprint.classList.remove('scanning');
+                    scanFingerprint.innerHTML = '<i class="fas fa-check-circle" style="color: var(--secondary);"></i>';
+                    submitMobileBtn.disabled = false;
+                }, 2000);
+            });
+
+            // Form submissions
+            submitDobBtn.addEventListener('click', function() {
+                const aadhaar = document.getElementById('aadhaar-dob').value;
+                const name = document.getElementById('name-dob').value;
+                const currentDob = document.getElementById('current-dob').value;
+                const newDob = document.getElementById('new-dob').value;
+                
+                // Clear previous errors
+                document.getElementById('aadhaar-dob-error').style.display = 'none';
+                document.getElementById('name-dob-error').style.display = 'none';
+                document.getElementById('current-dob-error').style.display = 'none';
+                document.getElementById('new-dob-error').style.display = 'none';
+                
+                let isValid = true;
+                
+                // Validate Aadhaar (12 digits)
+                if (!/^\d{12}$/.test(aadhaar)) {
+                    document.getElementById('aadhaar-dob-error').textContent = 'Aadhaar must be 12 digits';
+                    document.getElementById('aadhaar-dob-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate name
+                if (name.trim().length < 3) {
+                    document.getElementById('name-dob-error').textContent = 'Name is required';
+                    document.getElementById('name-dob-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate dates
+                if (!currentDob) {
+                    document.getElementById('current-dob-error').textContent = 'Current DOB is required';
+                    document.getElementById('current-dob-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (!newDob) {
+                    document.getElementById('new-dob-error').textContent = 'New DOB is required';
+                    document.getElementById('new-dob-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    // Submit to Google Sheets via Apps Script
+                    submitRequest({
+                        serviceType: 'DOB_UPDATE',
+                        aadhaarNumber: aadhaar,
+                        name: name,
+                        currentDOB: currentDob,
+                        newDOB: newDob,
+                        operatorID: 'khursheeda@123'
+                    });
+                }
+            });
+
+            submitMobileBtn.addEventListener('click', function() {
+                const aadhaar = document.getElementById('aadhaar-mobile').value;
+                const name = document.getElementById('name-mobile').value;
+                const newMobile = document.getElementById('new-mobile').value;
+                
+                // Clear previous errors
+                document.getElementById('aadhaar-mobile-error').style.display = 'none';
+                document.getElementById('name-mobile-error').style.display = 'none';
+                document.getElementById('new-mobile-error').style.display = 'none';
+                
+                let isValid = true;
+                
+                // Validate Aadhaar (12 digits)
+                if (!/^\d{12}$/.test(aadhaar)) {
+                    document.getElementById('aadhaar-mobile-error').textContent = 'Aadhaar must be 12 digits';
+                    document.getElementById('aadhaar-mobile-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate name
+                if (name.trim().length < 3) {
+                    document.getElementById('name-mobile-error').textContent = 'Name is required';
+                    document.getElementById('name-mobile-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate mobile (10 digits)
+                if (!/^\d{10}$/.test(newMobile)) {
+                    document.getElementById('new-mobile-error').textContent = 'Mobile must be 10 digits';
+                    document.getElementById('new-mobile-error').style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    // Submit to Google Sheets via Apps Script
+                    submitRequest({
+                        serviceType: 'MOBILE_UPDATE',
+                        aadhaarNumber: aadhaar,
+                        name: name,
+                        newMobile: newMobile,
+                        operatorID: 'khursheeda@123',
+                        biometricVerified: true
+                    });
+                }
+            });
+
+            // Status update submission
+            submitStatusBtn.addEventListener('click', function() {
+                const requestId = document.getElementById('status-request-id').value;
+                const newStatus = document.getElementById('new-status').value;
+                
+                updateRequestStatus(requestId, newStatus);
+            });
+
+            // Refresh requests
+            refreshRequests.addEventListener('click', function() {
+                loadRequests();
+                // Show refreshing animation
+                refreshRequests.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refreshing';
+                setTimeout(function() {
+                    refreshRequests.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+                }, 1000);
+            });
+
+            // Show toast notifications
+            function showToast(toastElement, message, duration = 3000) {
+                const messageElement = toastElement.querySelector('span');
+                messageElement.textContent = message;
+                toastElement.style.display = 'block';
+                
+                setTimeout(function() {
+                    toastElement.style.display = 'none';
+                }, duration);
+            }
+
+            // Submit request to Google Sheets via Apps Script
+            function submitRequest(data) {
+                // Show loading state
+                const submitBtn = data.serviceType === 'DOB_UPDATE' ? submitDobBtn : submitMobileBtn;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitBtn.disabled = true;
+                
+                // Generate a unique request ID
+                const requestId = 'REQ-' + new Date().getTime();
+                data.requestId = requestId;
+                
+                // Add timestamp
+                data.timestamp = new Date().toISOString();
+                data.status = 'Pending';
+                
+                // Submit to Google Apps Script
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({...data, action: 'create'})
+                })
+                .then(() => {
+                    // Close modal and show success message
+                    dobModal.classList.remove('active');
+                    mobileModal.classList.remove('active');
+                    showToast(successToast, 'Request submitted successfully!');
+                    
+                    // Reset button state
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    
+                    // Clear form fields
+                    if (data.serviceType === 'DOB_UPDATE') {
+                        document.getElementById('dob-form').reset();
+                    } else {
+                        document.getElementById('mobile-form').reset();
+                    }
+                    
+                    // Reload requests
+                    loadRequests();
+                })
+                .catch(error => {
+                    console.error('Error submitting to Google Sheets:', error);
+                    showToast(errorToast, 'Error submitting request: ' + error.message, 5000);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
+            }
+
+            // Load requests from Google Sheets via Apps Script
+            function loadRequests() {
+                requestsLoading.style.display = 'block';
+                requestsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading...</td></tr>';
+                
+                // Try to fetch data from Google Apps Script
+                fetch(`${GOOGLE_SCRIPT_URL}?action=getRequests&operator=khursheeda@123`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.status === 'success') {
+                        displayRequests(data.requests);
+                    } else {
+                        throw new Error(data.message || 'Failed to load requests');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading from Google Sheets:', error);
+                    requestsLoading.style.display = 'none';
+                    requestsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--danger);">Error loading requests: ' + error.message + '</td></tr>';
+                });
+            }
+
+            // Update request status
+            function updateRequestStatus(requestId, newStatus) {
+                submitStatusBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+                submitStatusBtn.disabled = true;
+                
+                // Try to update in Google Sheets
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'updateStatus',
+                        requestId: requestId,
+                        status: newStatus
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.status === 'success') {
+                        // Close modal and show success message
+                        statusModal.classList.remove('active');
+                        showToast(successToast, `Request status updated to ${newStatus}`);
+                        
+                        // Reset button state
+                        submitStatusBtn.innerHTML = 'Update Status';
+                        submitStatusBtn.disabled = false;
+                        
+                        // Reload requests
+                        loadRequests();
+                    } else {
+                        throw new Error(data.message || 'Failed to update status');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating status:', error);
+                    showToast(errorToast, 'Error updating status: ' + error.message, 5000);
+                    submitStatusBtn.innerHTML = 'Update Status';
+                    submitStatusBtn.disabled = false;
+                });
+            }
+
+            // Display requests in the table
+            function displayRequests(requests) {
+                requestsLoading.style.display = 'none';
+                requestsTableBody.innerHTML = '';
+                
+                if (!requests || requests.length === 0) {
+                    requestsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No requests found. Submit a request to see it here.</td></tr>';
+                    return;
+                }
+                
+                // Sort requests by timestamp (newest first)
+                requests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                requests.forEach(request => {
+                    const row = document.createElement('tr');
+                    
+                    // Mask Aadhaar number for display
+                    const maskedAadhaar = request.aadhaarNumber ? 
+                        '********' + request.aadhaarNumber.slice(-4) : 'N/A';
+                    
+                    row.innerHTML = `
+                        <td>${request.requestId || 'N/A'}</td>
+                        <td>${maskedAadhaar}</td>
+                        <td>${request.name || 'N/A'}</td>
+                        <td>${request.serviceType ? request.serviceType.replace('_', ' ') : 'N/A'}</td>
+                        <td><span class="status-badge status-${request.status ? request.status.toLowerCase() : 'pending'}">${request.status || 'Pending'}</span></td>
+                        <td>${request.timestamp ? new Date(request.timestamp).toLocaleString() : 'N/A'}</td>
+                        <td class="action-cell">
+                            <button class="btn btn-primary btn-sm update-status-btn" data-request-id="${request.requestId}">
+                                <i class="fas fa-edit"></i> Update Status
+                            </button>
+                        </td>
+                    `;
+                    
+                    requestsTableBody.appendChild(row);
+                });
+                
+                // Add event listeners to update status buttons
+                document.querySelectorAll('.update-status-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const requestId = this.getAttribute('data-request-id');
+                        const request = requests.find(req => req.requestId === requestId);
+                        
+                        if (request) {
+                            // Populate the status modal
+                            document.getElementById('status-request-id').value = request.requestId;
+                            document.getElementById('status-aadhaar').value = request.aadhaarNumber;
+                            document.getElementById('status-name').value = request.name;
+                            document.getElementById('status-service').value = request.serviceType;
+                            document.getElementById('new-status').value = request.status || 'Pending';
+                            
+                            // Show the modal
+                            statusModal.classList.add('active');
+                        }
+                    });
+                });
+            }
+
+            // Initial load of requests if logged in
+            if (sessionStorage.getItem('loggedIn') === 'true') {
+                loadRequests();
+            }
+        });
+    </script>
+</body>
+</html>
